@@ -111,8 +111,15 @@
 
 ```
 public String toString() {
-        return getClass().getName() + "@" + Integer.toHexString(hashCode());
-    }
+    return getClass().getName() + "@" + Integer.toHexString(hashCode());
+}
+```
+
+* String的toString方法源码如下：
+```
+public String toString() {
+    return this;
+}
 ```
 
 
