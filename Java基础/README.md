@@ -85,6 +85,7 @@
 		* 定义：要尽量使用合成和聚合，尽量不要使用继承。就是在一个新的对象里面使用一些已有的对象，使之成为新对象的一部分，新对象通过向这些对象的委派达到复用已有功能的目的。
 
 * 抽象、单一职责、高内聚、低耦合
+
 ### 5、static和final的区别和用途。
 * static：表示静态或者全局，可以修饰属性、方法、代码块，静态属性和静态方法是属于类的（也可以说是属于类的所有对象的），可以用类名.静态属性/静态方法来访问，用static修饰的代码块是静态代码块，当虚拟机（JVM）加载该类时，就会执行静态代码块。 
 * 修饰属性：当static修饰属性时，该属性称为静态变量或者类变量，该变量是在JVM加载类时初始化的；不被static修饰的属性是实例变量，在创建对象时被初始化，实例变量是各个对象独有的。使用一个类的静态变量并不会触发该类的加载。
@@ -102,7 +103,23 @@
 * StringBuffer 字符串变量（线程安全）
 * StringBuilder 字符串变量（非线程安全）
 
+* String final char[]
+
 ### 7、String有重写Object的hashcode和toString方法吗？如果重新equals不重写hashcode会出现什么问题？
+
+* Object的toString方法源码如下：
+
+```
+public String toString() {
+        return getClass().getName() + "@" + Integer.toHexString(hashCode());
+    }
+    ```
+
+
+* 两个都需要重写。因为要满足以下三个条件。
+	* 两个String，equals方法返回true，hashcode方法一定是true。
+	* 两个String，equals方法返回false，hashcode方法一定是false。
+	* 两个String，hashcode方法返回false，equals方法不一定是false。
 
 ### 8、Java如何序列化，如何思想序列化和反序列化，常见的序列化协议有哪些？
 
