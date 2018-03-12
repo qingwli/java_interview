@@ -113,7 +113,7 @@
 public String toString() {
         return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }
-    ```
+```
 
 
 * 两个都需要重写。因为要满足以下三个条件。
