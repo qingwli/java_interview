@@ -98,12 +98,17 @@
 * 修饰类：final修饰的类不能被继承。
 
 ### 6、String、StringBuffer、StringBuilder的区别？对String不变性的理解。
+* 都是final类，不能被继承。
+* String 字符串常量。长度不可变。String final char[]。
+* StringBuffer 字符串变量（线程安全）（synchronized）长度可变。
+* StringBuilder 字符串变量（非线程安全）。长度可变。
 
-* String 字符串常量
-* StringBuffer 字符串变量（线程安全）
-* StringBuilder 字符串变量（非线程安全）
+* 对于String不变性的理解
+	* String不能被继承。
+	* String的+号链接可以创建新的字符串。
+	* String a = new String("hahah")；可能会创建两个对象可能创建一个。如果常量池没有的话会在常量池创建一个新的对象。
+	* Java的+号，底层使用StringBuilder的append来实现的。
 
-* String final char[]
 
 ### 7、String有重写Object的hashcode和toString方法吗？如果重新equals不重写hashcode会出现什么问题？
 
@@ -128,9 +133,32 @@ public String toString() {
 	* 两个String，equals方法返回false，hashcode方法一定是false。
 	* 两个String，hashcode方法返回false，equals方法不一定是false。
 
-### 8、Java如何序列化，如何思想序列化和反序列化，常见的序列化协议有哪些？
+* 如果不重写hashcode方法会出现什么问题？
+	* 在存储hashMap的时候，如果原对象equals新对象，但是hashCode没有重写。则两个对象拥有了不同的hashCode，会在集合中存储两个值相同的对象，导致混淆。所以两个必须同时重写。
+### 8、Java如何序列化，如何实现序列化和反序列化，常见的序列化协议有哪些？
+* Java序列化定义
+	* 将那些实现了Serializable接口的对象转换成一个字节序列，并能在以后将这个字节序列完全恢复成原来的对象，序列化可以弥补操作系统之间的差异。
 
-### 9、常见一层分为哪两种从？常见异常的基类以及常见的异常？
+* 如何实现序列化和反序列化
+	* 实现序列化
+	* 1、实现java.io.Serializable接口，就可实现序列化。
+	* 2、通过ObjectOutputStream和ObjectInputStream就可以对对象进行序列化和反序列化。
+	* 3、虚拟机是否允许反序列化，取决于（private static final long serialVersionUID）
+	* 4、序列化不保存静态变量
+	* 5、要想将父类对象也序列化，就需要让父类也实现Serializable 接口。
+	* 6、Transient 关键字控制变量的序列化。在变量名上加该关键字，可以阻止该变量序列化到文件，反序列化后，变量设为初始值，int为0，对象为null。
+
+	* `在序列化过程中，如果被序列化的类中定义了writeObject 和 readObject 方法，虚拟机会试图调用对象类里的 writeObject 和 readObject 方法，进行用户自定义的序列化和反序列化。`
+
+* 常见的序列化协议：XML，JSON。
+
+### 9、常见异常分为哪两种？常见异常的基类以及常见的异常？
+
+* Java中有两种异常：受检查的异常(checked)和不受检查的异常(unchecked)。
+	* 不受检查的异常不需要在方法或者构造函数上声明，就算方法或者构造函数的声明可能会抛出这样的异常。 
+	* 受检查的异常必须要用throws抛出异常。
+
+* ![图片](http://img.blog.csdn.net/20140825105709593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHVodWlfY3M=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 ### 10、Java中的NIO、BIO、AIO分别是什么？
 
