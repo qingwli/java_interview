@@ -158,7 +158,7 @@ public String toString() {
 	* 不受检查的异常不需要在方法或者构造函数上声明，就算方法或者构造函数的声明可能会抛出这样的异常。 
 	* 受检查的异常必须要用throws抛出异常。
 
-* ![图片](http://img.blog.csdn.net/20140825105709593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHVodWlfY3M=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+	![图片](http://img.blog.csdn.net/20140825105709593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHVodWlfY3M=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 
 常见的异常，NullPointerException,ClassNotFoundException,FileNotFoundException,ArrayIndexOutOfBoundsException 
@@ -168,6 +168,7 @@ public String toString() {
 	* 传统的同步阻塞模型开发中，ServerSocket负责绑定IP地址，启动监听端口；Socket负责发起连接操作。连接成功后，双方通过输入和输出流进行同步阻塞式通信。 
 	* 简单的描述一下BIO的服务端通信模型：采用BIO通信模型的服务端，通常由一个独立的Acceptor线程负责监听客户端的连接，它接收到客户端连接请求之后为每个客户端创建一个新的线程进行链路处理没处理完成后，通过输出流返回应答给客户端，线程销毁。即典型的一请求一应答通宵模型。
 	* 为了改进这种一连接一线程的模型，我们可以使用线程池来管理这些线程（需要了解更多请参考前面提供的文章），实现1个或多个线程处理N个客户端的模型（但是底层还是使用的同步阻塞I/O），通常被称为"伪异步I/O模型"。
+
 
 *  NIO我们一般认为是New I/O（也是官方的叫法），因为它是相对于老的I/O类库新增的（其实在JDK 1.4中就已经被引入了，但这个名词还会继续用很久，即使它们在现在看来已经是“旧”的了，所以也提示我们在命名时，需要好好考虑），做了很大的改变。但民间跟多人称之为Non-block I/O，即非阻塞I/O，因为这样叫，更能体现它的特点。而下文中的NIO，不是指整个新的I/O库，而是非阻塞I/O。
 
@@ -179,6 +180,7 @@ public String toString() {
 
     对于低负载、低并发的应用程序，可以使用同步阻塞I/O来提升开发速率和更好的维护性；对于高负载、高并发的（网络）应用，应使用NIO的非阻塞模式来开发。
 
+
     *  Buffer是一个对象，包含一些要写入或者读出的数据。
 
     在NIO库中，所有数据都是用缓冲区处理的。在读取数据时，它是直接读到缓冲区中的；在写入数据时，也是写入到缓冲区中。任何时候访问NIO中的数据，都是通过缓冲区进行操作。
@@ -186,6 +188,7 @@ public String toString() {
     缓冲区实际上是一个数组，并提供了对数据结构化访问以及维护读写位置等信息。
 
     具体的缓存区有这些：ByteBuffe、CharBuffer、 ShortBuffer、IntBuffer、LongBuffer、FloatBuffer、DoubleBuffer。他们实现了相同的接口：Buffer。
+    
 
     * 我们对数据的读取和写入要通过Channel，它就像水管一样，是一个通道。通道不同于流的地方就是通道是双向的，可以用于读、写和同时读写操作。
 
@@ -195,6 +198,7 @@ public String toString() {
 
     SelectableChannel：用户网络读写
     FileChannel：用于文件操作
+
 
     * Selector是Java  NIO 编程的基础。
 
