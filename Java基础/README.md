@@ -226,23 +226,69 @@ public String toString() {
 
 ### 11、什么是匿名内部类？如何访问在其外面定义的变量？
 
-* 匿名内部类也就是没有名字的内部类,正因为没有名字，所以匿名内部类只能使用一次，它通常用来简化代码编写，但使用匿名内部类还有个前提条件：`必须继承一个父类或实现一个接口`。
+* 匿名内部类也就是没有名字的内部类,正因为没有名字，所以匿名内部类只能使用一次，它通常用来简化代码编写。
+
+	* 1、使用匿名内部类时，我们必须是继承一个类或者实现一个接口，但是两者不可兼得，同时也只能继承一个类或者实现一个接口。
+    * 2、匿名内部类中是不能定义构造函数。
+    * 3、匿名内部类中不能存在任何的静态成员变量和静态方法。
+    * 4、匿名内部类为局部内部类，所以局部内部类的所有限制同样对匿名内部类生效。
 
 * 最常用的情况就是在多线程的实现上，因为要实现多线程必须继承Thread类或是继承Runnable接口。
 
 ### 12、Servlet的生存周期。
+* Servlet 通过调用 init () 方法进行初始化。
+* Servlet 调用 service() 方法来处理客户端的请求。
+* Servlet 通过调用 destroy() 方法终止（结束）。
+* 最后，Servlet 是由 JVM 的垃圾回收器进行垃圾回收的。
 
 ### 13、Jsp和Servlet的区别？
 
+* 最简单的理解。Jsp就是html中可以写Java代码。Servlet就是Java中可以写html代码。
+
 ### 14、你知道的开源协议有哪些？
 
+*BSD、Apache、GPL、LGPL。
+
 ### 15、你知道的开源软件有哪些？
+
+* Apache、Nginx、Mysql、Wordpress。
 
 ### 16、对于高负载、高并发、分布式、消息队列的了解。
 
 ### 17、object类你知道的方法。
 
+* toString, hashCode，wait，notify，notifyAll。
+
+* wait
+	* public final void wait() throws InterruptedException,IllegalMonitorStateException
+
+	* 方法必须在同步方法或者同步块里面进行调用，在调用前，需要获得该对象的对象级别锁。如果在调用wait方法时没有获得锁，则会抛出IllegalMonitorStateException异常，是RuntimeException的之类。
+
+	在进入wait方法后，当前线程释放锁，进入阻塞状态，在从wait方法返回之前，线程会与其他线程竞争重新获得锁，
+
+* notify
+	* public final native void notify() throws IllegalMonitorStateException
+	* 方法必须在同步方法或者同步块里面进行调用，在调用前，需要获得该对象的对象级别锁。如果在调用notify方法时没有获得锁，则会抛出IllegalMonitorStateException异常，是RuntimeException的之类。
+
+	* 该方法用来通知那些等待唤醒的线程。如果有多个线程等待唤醒，则从线程规划器中（我认为是栈）选取一个线程进行唤醒，当前线程也不会马上释放该对象锁，需要等待当前的同步代码块执行完毕，当前线程释放锁，其他线程才能获得锁，才能从wait方法进行返回，其他线程继续阻塞，等待其他的线程发出notify或者notifyAll。他们等待的是notify或者notifyAll，而不是锁。一个线程被唤醒，才会等待锁，获得锁才可以继续执行。
+
+* notifyAll
+	* public final native void notifyAll() throws IllegalMonitorStateException
+	* notifyAll使所有的原来在wait的线程全部退出wait状态，全部被唤醒，但是还没有获得锁，所以不能继续执行。变成等待获取该对象上的锁，一旦该对象锁被释放，他们就会去竞争。一个对象获得锁后就回去继续执行，直到他退出synchronized代码块，其他已经被唤醒的线程会继续竞争该锁，然后直到都有的线程都执行完毕。
+
+* 深入理解
+	* 在Java中，每个对象都有两个池，锁(monitor)池和等待池。
+
+	* 如果线程调用了该对象的wait方法，那么线程进入该对象等待池，等待池中的线程不会去竞争该对象的锁。
+	
+	* 锁池:假设线程A已经拥有了某个对象(注意:不是类)的锁，而其它的线程想要调用这个对象的某个synchronized方法(或者synchronized块)，由于这些线程在进入对象的synchronized方法之前必须先获得该对象的锁的拥有权，但是该对象的锁目前正被线程A拥有，所以这些线程就进入了该对象的锁池中。
+
+	* 等待池:假设一个线程A调用了某个对象的wait()方法，线程A就会释放该对象的锁(因为wait()方法必须出现在synchronized中，这样自然在执行wait()方法之前线程A就已经拥有了该对象的锁)，同时线程A就进入到了该对象的等待池中。如果另外的一个线程调用了相同对象的notifyAll()方法，那么处于该对象的等待池中的线程就会全部进入该对象的锁池中，准备争夺锁的拥有权。如果另外的一个线程调用了相同对象的notify()方法，那么仅仅有一个处于该对象的等待池中的线程(随机)会进入该对象的锁池.
+
 ### 18、Java的finalize，finally，final三个关键字的区别和应用场景。
+* final：可用来定义变量、方法传入的参数、类、方法。
+* finally：只能跟在try/catch语句中，并且附带一个语句块，表示最后执行。
+* finalize：是垃圾回收器操作的运行机制中的一部分，进行垃圾回收器操作时会调用finalize方法，因为finalize方法是object的方法，所以每个类都有这个方法并且可以重写这个方法，在这个方法里实现释放系统资源及其他清理工作，JVM不保证此方法总被调用。
 
 ### 19、Tomcat服务器的原理。
 
