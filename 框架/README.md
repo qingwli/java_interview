@@ -15,3 +15,7 @@
 7、Spring中autowire和resourse关键字的区别。
 
 8、Hibernate和mybatis的区别。
+
+9、Spring中autowire和resourse关键字的区别。
+
+10、如何实现autowire注解的功能。

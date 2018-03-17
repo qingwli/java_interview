@@ -247,7 +247,7 @@ public String toString() {
 
 ### 14、你知道的开源协议有哪些？
 
-*BSD、Apache、GPL、LGPL。
+* BSD、Apache、GPL、LGPL。
 
 ### 15、你知道的开源软件有哪些？
 
@@ -290,9 +290,100 @@ public String toString() {
 * finally：只能跟在try/catch语句中，并且附带一个语句块，表示最后执行。
 * finalize：是垃圾回收器操作的运行机制中的一部分，进行垃圾回收器操作时会调用finalize方法，因为finalize方法是object的方法，所以每个类都有这个方法并且可以重写这个方法，在这个方法里实现释放系统资源及其他清理工作，JVM不保证此方法总被调用。
 
-### 19、Tomcat服务器的原理。
+### 19、Tomcat服务器的原理，自己写一个tomcat服务器，你会怎么写。
+
+* Tomcat
+　|---bin：存放启动和关闭Tomcat脚本文件；
+　|---conf：存放不同的配置文件（server.xml和web.xml）；
+　|---lib：存放Tomcat运行需要的库文件（JARS）；
+　|---logs：存放Tomcat执行时的日志文件；
+　|---webapps：Tomcat的主要Web发布目录（包括应用程序示例）；
+
+* Tomcat架构及常用的组件：
+	server:
+		1、port 指定一个端口，这个端口负责监听关闭tomcat的请求
+    	2、shutdown 指定向端口发送的命令字符串
+
+    service:          
+    	1、name 指定service的名字 
+
+    Connector (表示客户端和service之间的连接)：
+          1、port指定服务器端要创建的端口号，并在这个断口监听来自客户端的请求
+          2、minProcessors 服务器启动时创建的处理请求的线程数 
+          3、maxProcessors 最大可以创建的处理请求的线程数 
+          4、enableLookups 如果为true，则可以通过调用request.getRemoteHost()进行DNS查询来得到远程客户端的实际主机名，若为false则不进行DNS查询，而是返回其ip地址 
+          5、redirectPort 指定服务器正在处理http请求时收到了一个SSL传输请求后重定向的端口号 
+          6、acceptCount 指定当所有可以使用的处理请求的线程数都被使用时，可以放到处理队列中的请求数，超过这个数的请求将不予处理 
+          7、connectionTimeout 指定超时的时间数(以毫秒为单位) 
+
+    Engine(表示指定service中的请求处理机，接收和处理来自Connector的请求)：
+          1、defaultHost 指定缺省的处理请求的主机名，它至少与其中的一个host元素的name属性值是一样的 
+    Context (表示一个web应用程序)：
+          1、docBase 应用程序的路径或者是WAR文件存放的路径 
+          2、path 表示此web应用程序的url的前缀，这样请求的url为http://localhost:8080/path/**** 
+          3、reloadable 这个属性非常重要，如果为true，则tomcat会自动检测应用程序的/WEB-INF/lib 和/WEB-INF/classes目录的变化，自动装载新的应用程序，我们可以在不重起tomcat的情况下改变应用程序 
+    
+    host (表示一个虚拟主机)：
+          1、name 指定主机名 
+          2、appBase 应用程序基本目录，即存放应用程序的目录 
+          3、unpackWARs 如果为true，则tomcat会自动将WAR文件解压，否则不解压，直接
+
+	定义连接器可以使用多种属性，有些属性也只适用于某特定的连接器类型。一般说来，常见于server.xml中的连接器类型通常有4种：
+	1) HTTP连接器 2) SSL连接器 3) AJP 1.3连接器 4) proxy连接器
+
+	以下为常用属性的说明：
+	1) address：指定连接器监听的地址，默认为所有地址，即0.0.0.0； 可以自己指定的，如
+	2) maxThreads：支持的最大并发连接数，默认为200；
+	3) port：监听的端口，默认为0；
+	4) protocol：连接器使用的协议，默认为HTTP/1.1，定义AJP协议时通常为AJP/1.3；
+	5) redirectPort：如果某连接器支持的协议是HTTP，当接收客户端发来的HTTPS请求时，则转发至此属性定义的端口；
+	6) connectionTimeout：等待客户端发送请求的超时时间，单位为毫秒，默认为60000，即1分钟；
+	7) enableLookups：是否通过request.getRemoteHost()进行DNS查询以获取客户端的主机名；默认为true； 进行反解的，可以设置为false
+	8) acceptCount：设置等待队列的最大长度；通常在tomcat所有处理线程均处于繁忙状态时，新发来的请求将被放置于等待队列中；
+
+* Tomcat Server处理一个HTTP请求的过程
+	创建了一个HttpServer对象，并调用了该对象的await方法。看名字，该方法应该是等待http请求之类的东东。我们来看看方法内部.创建了一个Socket服务器，并循环阻塞监听http请求，当有http请求到来时， 该方法便创建一个Request对象，构造参数是socket获取的输入流对象， 用于读取客户端请求的数据并解析。 然后再创建一个Response对象，构造参数是socket的输出流对象， 并含有一个Request对象的成员变量。Response对象用于将静态页面发送给浏览器或者是其他的客户端。最后， 该方法校验请求中是否含有关闭命令的字符串，如果有，就停止服务器的运行。我们继续看看Request 是如何解析Http请求的吧。Request 类代表一个 HTTP 请求。从负责与客户端通信的 Socket 中传递过来 InputStream 对象来构造这个类的一个实例。你调用 InputStream 对象其中一个 read 方法来获 取 HTTP 请求的原始数据。其中最主要的方法就是parse 和 parseUri ，他们用于逐个解析每个从客户端传递过来的字节，我们先看parse方法：我们也看到该方法是十分的简单， 创建一个StringBuffer 对象，然后从流中读取字节，然后循环将字节转成字符写入到Stringbuffer对象中。最后传入到parseUri方法中进行解析。我们总结一下Request类，这个类其实就是解析HTTP 消息头内容的，先将流中数据转成字节，然后将转成字符，最后将字符解析，得到自己感兴趣的内容。奏是这么简单。好了，我们再看看Response类。看看他是怎么实现的。可以看到，该方法也非常的简单， sendStaticResource 方法是用来发送一个静态资源，例如一个 HTML 文件。它首先通过传递 上一级目录的路径和子路径给 File 累的构造方法来实例化 java.io.File 类。然后它检查该文件是否存在。假如存在的话，通过传递 File 对象让 sendStaticResource 构造一个 java.io.FileInputStream 对象。然后，它调用 FileInputStream 的 read 方法并把字 节数组写入 OutputStream 对象。请注意，这种情况下，静态资源是作为原始数据发送给浏览器的。假如文件并不存在，sendStaticResource 方法发送一个错误信息到浏览器。
+
+
+	1、用户点击网页内容，请求被发送到本机端口8080，被在那里监听的Coyote HTTP/1.1 Connector获得。 2、Connector把该请求交给它所在的Service的Engine来处理，并等待Engine的回应。 3、Engine获得请求localhost/test/index.jsp，匹配所有的虚拟主机Host。 4、Engine匹配到名为localhost的Host（即使匹配不到也把请求交给该Host处理，因为该Host被定义为该Engine的默认主机），名为localhost的Host获得请求/test/index.jsp，匹配它所拥有的所有的Context。Host匹配到路径为/test的Context（如果匹配不到就把该请求交给路径名为“ ”的Context去处理）。 5、path=“/test”的Context获得请求/index.jsp，在它的mapping table中寻找出对应的Servlet。Context匹配到URL PATTERN为*.jsp的Servlet,对应于JspServlet类。 6、构造HttpServletRequest对象和HttpServletResponse对象，作为参数调用JspServlet的doGet（）或doPost（）.执行业务逻辑、数据存储等程序。 7、Context把执行完之后的HttpServletResponse对象返回给Host。 8、Host把HttpServletResponse对象返回给Engine。 9、Engine把HttpServletResponse对象返回Connector。 10、Connector把HttpServletResponse对象返回给客户Browser。
 
 ### 20、动态代理的实现方式和区别。
+
+ * 代理模式是一种设计模式，提供了对目标对象额外的访问方式，即通过代理对象访问目标对象，这样可以在不修改原目标对象的前提下，提供额外的功能操作，扩展目标对象的功能。
+ * 举个例子，我们生活中经常到火车站去买车票，但是人一多的话，就会非常拥挤，于是就有了代售点，我们能从代售点买车票了。这其中就是代理模式的体现，代售点代理了火车站对象，提供购买车票的方法。
+
+* 静态代理
+	这种代理方式需要代理对象和目标对象实现一样的接口。
+	优点：
+		可以在不修改目标对象的前提下扩展目标对象的功能。
+	缺点：
+		冗余。由于代理对象要实现与目标对象一致的接口，会产生过多的代理类。
+		不易维护。一旦接口增加方法，目标对象与代理对象都要进行修改。
+
+* 动态代理
+	动态代理利用了JDK API，动态地在内存中构建代理对象，从而实现对目标对象的代理功能。动态代理又被称为JDK代理或接口代理。
+
+	* 静态代理与动态代理的区别主要在：
+		静态代理在编译时就已经实现，编译完成后代理类是一个实际的class文件。
+		动态代理是在运行时动态生成的，即编译完成后没有实际的class文件，而是在运行时动态生成类字节码，并加载到JVM中
+		特点：
+		动态代理对象不需要实现接口，但是要求目标对象必须实现接口，否则不能使用动态代理。
+
+* cglib
+	cglib (Code Generation Library )是一个第三方代码生成类库，运行时在内存中动态生成一个子类对象从而实现对目标对象功能的扩展。
+
+	cglib特点
+
+	JDK的动态代理有一个限制，就是使用动态代理的对象必须实现一个或多个接口。
+	如果想代理没有实现接口的类，就可以使用CGLIB实现。
+	CGLIB是一个强大的高性能的代码生成包，它可以在运行期扩展Java类与实现Java接口。
+	它广泛的被许多AOP的框架使用，例如Spring AOP和dynaop，为他们提供方法的interception（拦截）。
+	CGLIB包的底层是通过使用一个小而快的字节码处理框架ASM，来转换字节码并生成新的类。
+	不鼓励直接使用ASM，因为它需要你对JVM内部结构包括class文件的格式和指令集都很熟悉。
+	cglib与动态代理最大的区别就是
+
+	使用动态代理的对象必须实现一个或多个接口
+	使用cglib代理的对象则无需实现接口，达到代理类无侵入。
 
 ### 21、怎么实现负载均衡。
 
