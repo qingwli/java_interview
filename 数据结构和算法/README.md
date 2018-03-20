@@ -1,12 +1,32 @@
 # 数据结构与算法
 
+* 1、栈。后进先出；顺序栈、链式栈的底层实现；栈的应用：符号匹配。中缀转后缀、后缀求值。标签匹配。网页浏览器中已访问页面的历史记录。
+http://blog.csdn.net/javazejian/article/details/53362993
+
+* 2、队列。
+
 1、HashMap和HashTable的区别，HashMap的key可以是任何对象或者数据类型吗？
+* HashTable是线程安全的。HashMap是线程不安全的。
+* HashTable不可以存储null值，HashMap可以存储null值。key和value都可以）
+* HashTable和HashMap都能通过values()方法返回一个Collection，然后进行遍历处理。两者都可以通过entrySet()方法返回一个Set然后进行遍历处理。
+* HashTable使用Enumeration，HashMap使用Iterator。
+* HashTable直接使用对象的hashCode，HashMap重新计算hash值，而且用于代替求模。
+* HashTable基于Dictionary类，HashMap基于AbstractMap类。
+
+* HashMap的key可以为null但不能是可变对象，如果是可变对象的话，改变对象的属性，则对应的HashCode也进行相应的改变，否则下次无法找到已经存在Map的值。如果是可变对象的话，要保证对象成员变量改变的时候不能改变哈希值。
+
+* HashTable是线程安全的。 是在对应的方法上添加了synchronized关键字进行修饰。执行较慢，推荐使用ConcurrectHashMap，使用的分段锁。
 
 2、Map中有哪些类？哪些是线程安全的？如何实现的线程安全？
 
+LinkedHashMap、HashMap、HashTable、TreeMap。
+
 4、了解Java collection类，集合框架。
 
-5、HashMap和Concurrect HashMap的区别？如何实现线程安全？
+https://www.lqwang.net/595.html
+
+5、HashMap和ConcurrectHashMap的区别？如何实现线程安全？
+* HashMap是线程不安全的。ConcurrectHashMap是线程安全的。
 
 6、HashMap的原理、Hashmap为什么大小是2的幂次。
 
