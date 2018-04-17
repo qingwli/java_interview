@@ -453,19 +453,3 @@ HTTP重定向、DNS负载均衡，Nginx负载均衡等。
 
 ### 23、一致性hash算法
 
-rds6rz222yqmf4j02tu4o.mysql.rds.aliyuncs.com
-liqw_305
-Liqw305__
-org_ec_305
-
-url: jdbc:mysql://${MYSQL_URL:rds6rz222yqmf4j02tu4o.mysql.rds.aliyuncs.com:3306/${MYSQL_DATABASE:org_ec_305}}?characterEncoding=utf-8
-# 使用druid数据源
-username: ${MYSQL_USER:liqw_305}
-password: ${MYSQL_PASS:Liqw305__}
-
-索引最左原则
-数据库优化
-数据库锁
-
-
-jvm 第四章 4.2.4 4.2.6 jvm调优 第六章 内存模型 垃圾回收 第七章 加载机制 276 热更新  线程安全和锁
