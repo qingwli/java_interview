@@ -95,7 +95,7 @@
 
 8、各个垃圾收集器是如何工作的？
 
-	[内容较多](https://crowhawk.github.io/2017/08/15/jvm_3/)
+[内容较多](https://crowhawk.github.io/2017/08/15/jvm_3/)
 
 9、用什么工具可以查出内存泄漏？
 * 一. Memory Analyzer－是一款开源的JAVA内存分析软件，查找内存泄漏，能容易找到大块内存并验证谁在一直占用它，它是基于Eclipse RCP(Rich Client Platform)，可以下载RCP的独立版本或者Eclipse的插件。
