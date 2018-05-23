@@ -456,7 +456,9 @@ HTTP重定向、DNS负载均衡，Nginx负载均衡等。
 		根据服务器的响应时间来分配请求，响应时间短的优先分配，即负载压力小的优先会分配。
 		
 ### 22、Select，poll，epoll的区别。
-	[内容较多](https://blog.csdn.net/davidsguo008/article/details/73556811)
+
+[内容较多](https://blog.csdn.net/davidsguo008/article/details/73556811)
 
 ### 23、一致性hash算法
-	[内容较多](https://blog.csdn.net/cywosp/article/details/23397179)
+
+[内容较多](https://blog.csdn.net/cywosp/article/details/23397179)
