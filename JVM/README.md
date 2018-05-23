@@ -79,9 +79,9 @@
 * MajorGC：是指清理老年代（很多MajorGC是由MinorGC触发的）
 * FullGC：是指清理整个堆空间包括年轻代和永久代
 
-Minor GC触发条件：当Eden区满时，触发Minor GC。
+* Minor GC触发条件：当Eden区满时，触发Minor GC。
 
-Full GC触发条件：
+* Full GC触发条件：
 
 	* （1）调用System.gc时，系统建议执行Full GC，但是不必然执行
 
