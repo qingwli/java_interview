@@ -149,7 +149,7 @@
 
 11、JVM线程死锁如何判断？
 
-	[JConsole](http://www.cnblogs.com/ilahsa/archive/2013/06/03/3115410.html)
+[JConsole](http://www.cnblogs.com/ilahsa/archive/2013/06/03/3115410.html)
 
 12、Java如何进行对象的实例化？例如Student s = new Student();
 
